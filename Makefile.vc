@@ -1,0 +1,38 @@
+##
+## lzdgen - LZ data generator example
+##
+## Visual C++ Makefile
+##
+
+.SUFFIXES:
+.SUFFIXES: .obj .c
+
+CFLAGS = /W2 /O2 /fp:fast /GL
+CPPFLAGS = /DNDEBUG
+LDFLAGS = /release
+
+!IF "$(PLATFORM)"=="X64" || "$(PLATFORM)"=="x64"
+LDFLAGS = $(LDFLAGS) /opt:ref,icf /subsystem:console,5.02
+!ELSEIF "$(PLATFORM)"=="X86" || "$(PLATFORM)"=="x86"
+LDFLAGS = $(LDFLAGS) /opt:ref /subsystem:console,5.01
+!ENDIF
+
+objs = lzdgen.obj lzdatagen.obj parg.obj pcg_basic.obj
+
+target = lzdgen.exe
+
+all: $(target)
+
+.c.obj::
+	$(CC) /MP $(CFLAGS) $(CPPFLAGS) /c $<
+
+$(target): $(objs)
+	$(CC) $(CFLAGS) $(CPPFLAGS) /Fe$@ $** /link $(LDFLAGS) $(LDLIBS)
+
+clean:
+	del /Q $(objs) $(target)
+
+lzdgen.obj: lzdatagen.h parg.h pcg_basic.h
+lzdatagen.obj: lzdatagen.h
+parg.obj: parg.h
+pcg_basic.obj: pcg_basic.h
