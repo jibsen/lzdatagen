@@ -8,8 +8,9 @@
 
 .PHONY: clean all
 
-CFLAGS = -Wall -Wextra -march=native -Ofast -flto
+CFLAGS = -std=c99 -Wall -Wextra -march=native -Ofast -flto
 CPPFLAGS = -DNDEBUG
+LDLIBS = -lm
 
 ifeq ($(OS),Windows_NT)
   LDFLAGS += -static -s
