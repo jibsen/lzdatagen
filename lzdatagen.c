@@ -62,7 +62,7 @@ generate_literals(unsigned char *ptr, size_t size, double lit_exp)
 	size_t i;
 
 	for (i = 0; i < size; ++i) {
-		ptr[i] = (unsigned char) floor(256 * pow(rand_double(), lit_exp));
+		ptr[i] = (unsigned char) (256 * pow(rand_double(), lit_exp));
 	}
 }
 
@@ -90,7 +90,7 @@ generate_lengths(unsigned int len_freq[NUM_LEN], size_t num, double len_exp)
 	}
 
 	for (i = 0; i < num; ++i) {
-		size_t len = (size_t) floor(NUM_LEN * pow(rand_double(), len_exp));
+		size_t len = (size_t) (NUM_LEN * pow(rand_double(), len_exp));
 
 		assert(len < NUM_LEN);
 
