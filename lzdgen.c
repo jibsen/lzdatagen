@@ -18,6 +18,11 @@
 
 #define _POSIX_C_SOURCE 200809L
 
+#if defined(_MSC_VER)
+#  define _CRT_NONSTDC_NO_DEPRECATE
+#  define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #if defined(_WIN32) || defined(__CYGWIN__)
 #  include <io.h>
 #else
@@ -315,7 +320,7 @@ main(int argc, char *argv[])
 
 	if (strcmp(outfile, "-") == 0) {
 #if defined(_WIN32) || defined(__CYGWIN__)
-		if (_setmode(_fileno(stdout), _O_BINARY) == -1) {
+		if (setmode(fileno(stdout), O_BINARY) == -1) {
 			perror(EXE_NAME ": unable to set binary mode");
 			goto out;
 		}
