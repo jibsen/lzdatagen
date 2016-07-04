@@ -224,7 +224,7 @@ main(int argc, char *argv[])
 				v = strtod(ps.optarg, &ep);
 
 				if (ep == ps.optarg || *ep != '\0' || errno == ERANGE) {
-					printf_error("literal exponent mush be a floating point value");
+					printf_error("literal exponent must be a floating point value");
 					return EXIT_FAILURE;
 				}
 
@@ -258,7 +258,7 @@ main(int argc, char *argv[])
 				v = strtod(ps.optarg, &ep);
 
 				if (ep == ps.optarg || *ep != '\0' || errno == ERANGE || v < 1.0) {
-					printf_error("ratio mush be a floating point value >= 1.0");
+					printf_error("ratio must be a floating point value >= 1.0");
 					return EXIT_FAILURE;
 				}
 
