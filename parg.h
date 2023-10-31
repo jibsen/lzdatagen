@@ -1,12 +1,24 @@
 /*
  * parg - parse argv
  *
- * Written in 2015 by Joergen Ibsen
+ * Copyright 2015-2023 Joergen Ibsen
  *
- * To the extent possible under law, the author(s) have dedicated all
- * copyright and related and neighboring rights to this software to the
- * public domain worldwide. This software is distributed without any
- * warranty. <http://creativecommons.org/publicdomain/zero/1.0/>
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ *
+ * SPDX-License-Identifier: MIT-0
  */
 
 #ifndef PARG_H_INCLUDED
@@ -18,8 +30,8 @@ extern "C" {
 
 #define PARG_VER_MAJOR 1        /**< Major version number */
 #define PARG_VER_MINOR 0        /**< Minor version number */
-#define PARG_VER_PATCH 1        /**< Patch version number */
-#define PARG_VER_STRING "1.0.1" /**< Version number as a string */
+#define PARG_VER_PATCH 3        /**< Patch version number */
+#define PARG_VER_STRING "1.0.3" /**< Version number as a string */
 
 /**
  * Structure containing state between calls to parser.
@@ -46,7 +58,7 @@ struct parg_option {
 };
 
 /**
- * Values for the `has_arg` flag in `parg_option`.
+ * Values for `has_arg` flag in `parg_option`.
  *
  * @see parg_option
  */
@@ -93,7 +105,7 @@ parg_init(struct parg_state *ps);
  * If no option character in `optstring` matches a short option, `optopt`
  * is set to the option character, and '`?`' is returned.
  *
- * If an elements of argv does not contain options (a nonoption element),
+ * If an element of argv does not contain options (a nonoption element),
  * `optarg` points to the element, and `1` is returned.
  *
  * An element consisting of a single dash, '`-`', is returned as a nonoption.
@@ -171,8 +183,8 @@ parg_getopt_long(struct parg_state *ps, int argc, char *const argv[],
  *
  * If there are no long options, `longopts` may be `NULL`.
  *
- * @note The current implementation does not permute `argv` in place, it
- * allocates a temporary array the same size as `argv`.
+ * The return value can be used as `argc` parameter for `parg_getopt()` and
+ * `parg_getopt_long()`.
  *
  * @param argc number of elements in `argv`
  * @param argv array of pointers to command-line arguments
