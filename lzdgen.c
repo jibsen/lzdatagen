@@ -59,52 +59,57 @@ strtosize(const char *s, char **endptr, int base)
 {
 	char *ep = NULL;
 	unsigned long long v;
-
-	if (endptr != NULL) {
-		*endptr = (char *) s;
-	}
+	int power = 0;
+	int orig_errno = errno;
 
 	errno = 0;
 
 	v = strtoull(s, &ep, base);
 
-	if (v == ULLONG_MAX && errno == ERANGE) {
-		ep = (char *) s;
+	if (errno == 0) {
+		errno = orig_errno;
 	}
 
-	switch (tolower(*ep)) {
+	if (ep == s) {
+		goto done;
+	}
+
+	switch (*ep) {
 	case 'k':
-		if (v >= ULLONG_MAX / 1024ULL) {
-			return ULLONG_MAX;
-		}
-		v *= 1024ULL;
+	case 'K':
+		power = 1;
 		++ep;
 		break;
 	case 'm':
-		if (v >= ULLONG_MAX / (1024 * 1024ULL)) {
-			return ULLONG_MAX;
-		}
-		v *= 1024 * 1024ULL;
+	case 'M':
+		power = 2;
 		++ep;
 		break;
 	case 'g':
-		if (v >= ULLONG_MAX / (1024 * 1024 * 1024ULL)) {
-			return ULLONG_MAX;
-		}
-		v *= 1024 * 1024 * 1024ULL;
+	case 'G':
+		power = 3;
 		++ep;
 		break;
 	case 't':
-		if (v >= ULLONG_MAX / (1024 * 1024 * 1024 * 1024ULL)) {
-			return ULLONG_MAX;
-		}
-		v *= 1024 * 1024 * 1024 * 1024ULL;
+	case 'T':
+		power = 4;
 		++ep;
 		break;
 	default:
 		break;
 	}
 
+	while (power--) {
+		if (v > ULLONG_MAX / 1024ULL) {
+			errno = ERANGE;
+			v = ULLONG_MAX;
+			break;
+		}
+
+		v *= 1024ULL;
+	}
+
+done:
 	if (endptr != NULL) {
 		*endptr = ep;
 	}
@@ -272,6 +277,8 @@ main(int argc, char *argv[])
 				char *ep = NULL;
 				uint64_t n;
 
+				errno = 0;
+
 				n = strtoull(ps.optarg, &ep, 0);
 
 				if (ep == ps.optarg || *ep != '\0' || errno == ERANGE) {
@@ -287,9 +294,11 @@ main(int argc, char *argv[])
 				char *ep = NULL;
 				size_t n;
 
+				errno = 0;
+
 				n = strtosize(ps.optarg, &ep, 0);
 
-				if (ep == ps.optarg || *ep != '\0' || n == 0) {
+				if (ep == ps.optarg || *ep != '\0' || errno == ERANGE || n == 0) {
 					printf_error("size must be a positive integer");
 					return EXIT_FAILURE;
 				}
