@@ -1,7 +1,7 @@
 /*
  * lzdgen - LZ data generator example
  *
- * Copyright 2016 Joergen Ibsen
+ * Copyright 2016-2023 Joergen Ibsen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,7 +159,7 @@ print_version(void)
 	printf(
 	    EXE_NAME " " LZDG_VER_STRING "\n"
 	    "\n"
-	    "Copyright 2016 Joergen Ibsen\n"
+	    "Copyright 2016-2023 Joergen Ibsen\n"
 	    "\n"
 	    "Licensed under the Apache License, Version 2.0.\n"
 	    "There is NO WARRANTY, to the extent permitted by law.\n");
@@ -334,11 +334,11 @@ main(int argc, char *argv[])
 
 #if defined(_WIN32) || defined(__CYGWIN__)
 		fd = open(outfile,
-		          O_RDWR | O_CREAT | (flag_force ? O_TRUNC : O_EXCL) | O_BINARY,
+		          O_WRONLY | O_CREAT | (flag_force ? O_TRUNC : O_EXCL) | O_BINARY,
 		          S_IREAD | S_IWRITE);
 #else
 		fd = open(outfile,
-		          O_RDWR | O_CREAT | (flag_force ? O_TRUNC : O_EXCL),
+		          O_WRONLY | O_CREAT | (flag_force ? O_TRUNC : O_EXCL),
 		          S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 #endif
 
