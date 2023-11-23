@@ -1,7 +1,7 @@
 /*
  * lzdatagen - LZ data generator
  *
- * Copyright 2016 Joergen Ibsen
+ * Copyright 2016-2023 Joergen Ibsen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ generate_literals(unsigned char *ptr, size_t size, double lit_exp)
 	size_t i;
 
 	for (i = 0; i < size; ++i) {
-		ptr[i] = (unsigned char) (256 * pow(rand_double(), lit_exp));
+		ptr[i] = (unsigned char) (256 * powf((float) rand_double(), (float) lit_exp));
 	}
 }
 
@@ -92,7 +92,7 @@ generate_lengths(unsigned int len_freq[NUM_LEN], size_t num, double len_exp)
 	}
 
 	for (i = 0; i < num; ++i) {
-		size_t len = (size_t) (NUM_LEN * pow(rand_double(), len_exp));
+		size_t len = (size_t) (NUM_LEN * powf((float) rand_double(), (float) len_exp));
 
 		assert(len < NUM_LEN);
 
@@ -123,7 +123,7 @@ lzdg_generate_data(void *ptr, size_t size, double ratio, double len_exp, double 
 {
 	unsigned int len_freq[NUM_LEN];
 	unsigned char buffer[MAX_LEN];
-	unsigned char *p = ptr;
+	unsigned char *p = (unsigned char *) ptr;
 	size_t cur_len = 0;
 	size_t i = 0;
 	int last_was_match = 0;

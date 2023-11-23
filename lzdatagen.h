@@ -1,7 +1,7 @@
 /*
  * lzdatagen - LZ data generator
  *
- * Copyright 2016 Joergen Ibsen
+ * Copyright 2016-2023 Joergen Ibsen
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,9 @@ extern "C" {
 #endif
 
 #define LZDG_VER_MAJOR 0        /**< Major version number */
-#define LZDG_VER_MINOR 1        /**< Minor version number */
+#define LZDG_VER_MINOR 2        /**< Minor version number */
 #define LZDG_VER_PATCH 0        /**< Patch version number */
-#define LZDG_VER_STRING "0.1.0" /**< Version number as a string */
+#define LZDG_VER_STRING "0.2.0" /**< Version number as a string */
 
 void
 lzdg_generate_data(void *ptr, size_t size, double ratio, double len_exp, double lit_exp);
