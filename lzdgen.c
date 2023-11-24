@@ -131,7 +131,7 @@ printf_error(const char *fmt, ...)
 	fprintf(
 	    stderr,
 	    "\n"
-	    "usage: " EXE_NAME " [-fhVv] [-l EXP] [-m EXP] [-r RATIO] [-S SEED]\n"
+	    "usage: " EXE_NAME " [-bfhVv] [-l EXP] [-m EXP] [-r RATIO] [-S SEED]\n"
 	    "              [-s SIZE] OUTFILE\n");
 }
 
@@ -144,6 +144,7 @@ print_help(void)
 	    "Generate compressible data for testing purposes.\n"
 	    "\n"
 	    "options:\n"
+	    "  -b, --bulk             use faster, less precise method\n"
 	    "  -f, --force            overwrite output file\n"
 	    "  -h, --help             print this help and exit\n"
 	    "  -l, --literal-exp EXP  literal distribution exponent [3.0]\n"
@@ -183,12 +184,14 @@ main(int argc, char *argv[])
 	uint64_t seed;
 	size_t size = 1024 * 1024;
 	size_t offs = 0;
+	int flag_bulk = 0;
 	int flag_force = 0;
 	int flag_verbose = 0;
 	int retval = EXIT_FAILURE;
 	int c;
 
 	const struct parg_option long_options[] = {
+		{ "bulk", PARG_NOARG, NULL, 'b' },
 		{ "force", PARG_NOARG, NULL, 'f' },
 		{ "help", PARG_NOARG, NULL, 'h' },
 		{ "literal-exp", PARG_REQARG, NULL, 'l' },
@@ -206,7 +209,7 @@ main(int argc, char *argv[])
 
 	parg_init(&ps);
 
-	while ((c = parg_getopt_long(&ps, argc, argv, "fl:m:o:r:S:s:hVv", long_options, NULL)) != -1) {
+	while ((c = parg_getopt_long(&ps, argc, argv, "bfhl:m:o:r:S:s:Vv", long_options, NULL)) != -1) {
 		switch (c) {
 		case 1:
 		case 'o':
@@ -217,6 +220,9 @@ main(int argc, char *argv[])
 				printf_error("too many arguments");
 				return EXIT_FAILURE;
 			}
+			break;
+		case 'b':
+			flag_bulk = 1;
 			break;
 		case 'f':
 			flag_force = 1;
@@ -381,7 +387,12 @@ main(int argc, char *argv[])
 	while (offs < size) {
 		size_t num = size - offs > BLOCK_SIZE ? BLOCK_SIZE : size - offs;
 
-		lzdg_generate_data(buffer, num, ratio, len_exp, lit_exp);
+		if (flag_bulk) {
+			lzdg_generate_data_bulk(buffer, num, ratio, len_exp, lit_exp);
+		}
+		else {
+			lzdg_generate_data(buffer, num, ratio, len_exp, lit_exp);
+		}
 
 		if (fwrite(buffer, 1, num, fp) != num) {
 			perror(EXE_NAME ": write error");

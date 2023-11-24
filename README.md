@@ -23,6 +23,7 @@ interface for generating data:
     Generate compressible data for testing purposes.
 
     options:
+      -b, --bulk             use faster, less precise method
       -f, --force            overwrite output file
       -h, --help             print this help and exit
       -l, --literal-exp EXP  literal distribution exponent [3.0]
